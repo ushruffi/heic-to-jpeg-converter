@@ -3,4 +3,3 @@ click==7.1.2
 Pillow==8.1.2
 pycparser==2.20
 pyheif==0.5.1
-whatimage==0.0.3

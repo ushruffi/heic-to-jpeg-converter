@@ -5,7 +5,7 @@ with open("requirements.txt", "r", encoding="utf-8") as fh:
     requirements = fh.read()
 setup(
     name = 'heic-to-jpeg-converter',
-    version = '1.0.0',
+    version = '1.0.4',
     author = 'Talal Ashraf',
     author_email = 'ushruffi@gmail.com',
     license = 'MIT License',

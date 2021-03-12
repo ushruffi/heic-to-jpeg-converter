@@ -5,6 +5,31 @@ import click
 import pathlib
 import os
 
+welcome = """
+
+████████  █████  ██       █████  ██      ███████ 
+   ██    ██   ██ ██      ██   ██ ██      ██      
+   ██    ███████ ██      ███████ ██      ███████ 
+   ██    ██   ██ ██      ██   ██ ██           ██ 
+   ██    ██   ██ ███████ ██   ██ ███████ ███████ 
+                                                 
+
+██   ██ ███████ ██  ██████     ████████  ██████           ██ ██████  ███████ ███████ 
+██   ██ ██      ██ ██             ██    ██    ██          ██ ██   ██ ██      ██      
+███████ █████   ██ ██             ██    ██    ██          ██ ██████  █████   █████ 
+██   ██ ██      ██ ██             ██    ██    ██     ██   ██ ██      ██      ██    
+██   ██ ███████ ██  ██████        ██     ██████       █████  ██      ███████ ██ 
+                                                                                
+
+ ██████  ██████  ███    ██ ██    ██ ███████ ██████  ████████ ███████ ██████ 
+██      ██    ██ ████   ██ ██    ██ ██      ██   ██    ██    ██      ██   ██ 
+██      ██    ██ ██ ██  ██ ██    ██ █████   ██████     ██    █████   ██████  
+██      ██    ██ ██  ██ ██  ██  ██  ██      ██   ██    ██    ██      ██   ██ 
+ ██████  ██████  ██   ████   ████   ███████ ██   ██    ██    ███████ ██   ██ 
+                                                                             
+
+"""
+
 def heic_to_jpeg(source_folder, file, target_folder):
     with open(f'{source_folder}/{file}', 'rb') as f:
         data = f.read()
@@ -16,19 +41,26 @@ def heic_to_jpeg(source_folder, file, target_folder):
 
 @click.group()
 def cli():
-    click.echo("HEIC to JPEG Converter")
+    click.echo(welcome)
     pass
 
 @cli.command()
 @click.option('-t', '--target-folder', type=str, help='Folder to write converted images to', default='./converted')
-@click.option('-s', '--source-folder', type=str, help='Folder to read HEIC images from', default='./')
-def convert(target_folder, source_folder):
+@click.option('-s', '--source-folder', type=str, help='Folder to read HEIC images from', default='.')
+@click.option('-l', '--list-only', type=bool, help='Only list the files that will be converted but don\'t convert yet', flag_value=True, default=False)
+def convert(target_folder, source_folder, list_only):
+    click.echo("\n=============================================")
     click.echo(f'Converting all files in  "{source_folder}" and writing to "{target_folder}"')
+    click.echo("\n=============================================")
     pathlib.Path(target_folder).mkdir(parents=True, exist_ok=True)
-    click.echo(os.listdir(source_folder))
     files = [f for f in os.listdir(source_folder) if os.path.isfile(f'{source_folder}/{f}') and os.path.splitext(f)[1][1:].strip().lower() == "heic" ]
     click.echo(f'Files to convert:')
     for file in files:
-        click.echo(f'{file}')
+        click.echo(f'           --- {file}')
+    click.echo("\n=============================================")
+    if list_only:
+        return
     for file in files:
         heic_to_jpeg(source_folder, file, target_folder)
+    click.echo("\n=============================================")
+    click.echo("Done!\n")
